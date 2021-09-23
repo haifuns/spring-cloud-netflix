@@ -69,7 +69,10 @@ public class RibbonLoadBalancerClient implements LoadBalancerClient {
 
 	@Override
 	public <T> T execute(String serviceId, LoadBalancerRequest<T> request) throws IOException {
+
+		// 找到当前服务实例的loadbalancer，内部是一个map结构，每个服务对应一个AnnotationConfigApplicationContext容器存放相关组件
 		ILoadBalancer loadBalancer = getLoadBalancer(serviceId);
+		// 选中一个server，内部涉及zoneAwareLoadBalancer与eureka交互
 		Server server = getServer(loadBalancer);
 		if (server == null) {
 			throw new IllegalStateException("No instances available for " + serviceId);
@@ -134,6 +137,8 @@ public class RibbonLoadBalancerClient implements LoadBalancerClient {
 		if (loadBalancer == null) {
 			return null;
 		}
+
+		// RibbonClientConfiguration配置中使用的ILoadBalancer ZoneAwareLoadBalancer实现类
 		return loadBalancer.chooseServer("default"); // TODO: better handling of key
 	}
 
