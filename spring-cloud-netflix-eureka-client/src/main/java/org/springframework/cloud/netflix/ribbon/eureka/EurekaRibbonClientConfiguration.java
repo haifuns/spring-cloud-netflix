@@ -92,6 +92,8 @@ public class EurekaRibbonClientConfiguration {
 		if (this.propertiesFactory.isSet(IPing.class, serviceId)) {
 			return this.propertiesFactory.get(IPing.class, config, serviceId);
 		}
+
+		// ribbon整合eureka后使用的IPing组件
 		NIWSDiscoveryPing ping = new NIWSDiscoveryPing();
 		ping.initWithNiwsConfig(config);
 		return ping;

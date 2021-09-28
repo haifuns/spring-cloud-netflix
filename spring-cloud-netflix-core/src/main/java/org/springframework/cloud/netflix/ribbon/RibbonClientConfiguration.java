@@ -97,6 +97,8 @@ public class RibbonClientConfiguration {
 		if (this.propertiesFactory.isSet(IRule.class, name)) {
 			return this.propertiesFactory.get(IRule.class, config, name);
 		}
+
+		// ribbon默认负载均衡规则
 		ZoneAvoidanceRule rule = new ZoneAvoidanceRule();
 		rule.initWithNiwsConfig(config);
 		return rule;
