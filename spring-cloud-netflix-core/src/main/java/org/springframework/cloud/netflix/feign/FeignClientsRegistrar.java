@@ -119,6 +119,8 @@ class FeignClientsRegistrar implements ImportBeanDefinitionRegistrar,
 
 		Map<String, Object> attrs = metadata
 				.getAnnotationAttributes(EnableFeignClients.class.getName());
+
+		// @FeignClient注解扫描器
 		AnnotationTypeFilter annotationTypeFilter = new AnnotationTypeFilter(
 				FeignClient.class);
 		final Class<?>[] clients = attrs == null ? null
@@ -173,6 +175,8 @@ class FeignClientsRegistrar implements ImportBeanDefinitionRegistrar,
 	private void registerFeignClient(BeanDefinitionRegistry registry,
 			AnnotationMetadata annotationMetadata, Map<String, Object> attributes) {
 		String className = annotationMetadata.getClassName();
+
+		// 创建FeignClientFactoryBean
 		BeanDefinitionBuilder definition = BeanDefinitionBuilder
 				.genericBeanDefinition(FeignClientFactoryBean.class);
 		validate(attributes);

@@ -204,10 +204,14 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean,
 
 	protected <T> T loadBalance(Feign.Builder builder, FeignContext context,
 			HardCodedTarget<T> target) {
+
+		// LoadBalancerFeignClient
 		Client client = getOptional(context, Client.class);
 		if (client != null) {
 			builder.client(client);
 			Targeter targeter = get(context, Targeter.class);
+
+			// HystrixTargeter
 			return targeter.target(this, builder, context, target);
 		}
 
@@ -217,6 +221,8 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean,
 
 	@Override
 	public Object getObject() throws Exception {
+
+		// spring初始化调用
 		FeignContext context = applicationContext.getBean(FeignContext.class);
 		Feign.Builder builder = feign(context);
 
@@ -229,6 +235,8 @@ class FeignClientFactoryBean implements FactoryBean<Object>, InitializingBean,
 				url = this.name;
 			}
 			url += cleanPath();
+
+			// 配合负载均衡
 			return loadBalance(builder, context, new HardCodedTarget<>(this.type,
 					this.name, url));
 		}
